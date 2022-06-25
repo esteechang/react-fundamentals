@@ -1,0 +1,11 @@
+button {
+  padding: 7px 50px 7px 50px;
+  text-align: center;
+  border: 3px solid #c8a2c8;
+  background: transparent;
+  cursor: pointer;
+}
+
+button:active {
+  background-color: grey;
+}

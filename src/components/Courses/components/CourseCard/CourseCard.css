@@ -1,0 +1,45 @@
+.CourseCardContainer {
+  display: flex;
+  flex-direction: row;
+  border: 2px solid green;
+  margin: 20px 10px 10px 15px;
+  padding: 10px;
+}
+
+.LeftContainer {
+  padding-left: 10px;
+  padding-bottom: 10px;
+  width: 70%;
+}
+
+.Description {
+  margin-top: 30px;
+  font-size: 19px;
+}
+
+.RightContainer {
+  width: 30%;
+  padding-bottom: 10px;
+}
+
+.ButtonContainer {
+  padding: 0 20% 2% 20%;
+}
+
+.RightSegments {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 25px;
+  margin-top: 5px;
+}
+
+.alternateTitle {
+  margin: 5px;
+  margin-right: 10px;
+}
+
+.RightContents {
+  margin-top: 7%;
+  margin-bottom: 30px;
+}
