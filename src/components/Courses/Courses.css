@@ -1,0 +1,15 @@
+.container {
+  border: 2px solid skyblue;
+  margin: 10px;
+}
+
+.row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.AddCourseButton {
+  padding-right: 10px;
+  margin-left: auto;
+}

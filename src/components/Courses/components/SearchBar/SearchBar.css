@@ -1,0 +1,13 @@
+.searchbar {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.searchbar input {
+  margin: 15px;
+  width: 400px;
+  height: 30px;
+  border: 2px solid orange;
+  font-size: 18px;
+}
