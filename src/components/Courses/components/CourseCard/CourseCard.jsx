@@ -1,9 +1,9 @@
 import React from 'react';
-import { Button } from '../../../../common/Button/Button';
+import Button from '../../../../common/Button';
 import { formatDate } from '../../../../helpers';
 import './CourseCard.css';
 
-export const CourseCard = (props) => {
+const CourseCard = (props) => {
   const { title, description, authors, duration, creationDate } = props;
   return (
     <div className="CourseCardContainer">
@@ -35,3 +35,5 @@ export const CourseCard = (props) => {
     </div>
   );
 };
+
+export default CourseCard;

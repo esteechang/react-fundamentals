@@ -1,9 +1,9 @@
 import React from 'react';
-import { Logo } from './components/Logo/Logo';
-import { Button } from '../../common/Button/Button';
+import Logo from './components/Logo';
+import Button from '../../common/Button';
 import './Header.css';
 
-export const Header = (props) => {
+const Header = (props) => {
   return (
     <div className="header">
       <div className="logo">
@@ -16,3 +16,5 @@ export const Header = (props) => {
     </div>
   );
 };
+
+export default Header;

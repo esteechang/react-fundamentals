@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { Button } from '../../common/Button/Button';
+import Button from '../../common/Button';
 import { getCourseDuration } from '../../helpers/index';
 import './CreateCourse.css';
 
-export const CreateCourse = (props) => {
+const CreateCourse = (props) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [timeDuration, setTimeDuration] = useState(0);
@@ -81,7 +81,7 @@ export const CreateCourse = (props) => {
           </div>
           <div className="AuthorButton">
             <Button
-              onClickFunction={addCourseAuthorHandler}
+              onClick={addCourseAuthorHandler}
               title="Add Author"
               className="AuthorButton"
               value={data}
@@ -108,7 +108,7 @@ export const CreateCourse = (props) => {
             </div>
             <div className="AuthorButton">
               <Button
-                onClickFunction={removeCourseAuthorHandler}
+                onClick={removeCourseAuthorHandler}
                 title="Remove Author"
                 className="AuthorButton"
                 value={data}
@@ -188,10 +188,7 @@ export const CreateCourse = (props) => {
                 className="CreateCourseAddAuthor"
                 onChange={newAuthorHandler}
               />
-              <Button
-                title="Create Author"
-                onClickFunction={addNewAuthorHandler}
-              />
+              <Button title="Create Author" onClick={addNewAuthorHandler} />
             </div>
             <div className="Duration">
               <h2>Duration</h2>
@@ -224,3 +221,5 @@ export const CreateCourse = (props) => {
     </div>
   );
 };
+
+export default CreateCourse;

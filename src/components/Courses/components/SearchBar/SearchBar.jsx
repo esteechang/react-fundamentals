@@ -1,18 +1,21 @@
 import React from 'react';
-import { Button } from '../../../../common/Button/Button';
+import Button from '../../../../common/Button';
 import './SearchBar.css';
 
-export const SearchBar = (props) => {
+const SearchBar = (props) => {
+  const { value, name, placeholder, type, onChange, onClick } = props;
   return (
     <div className="searchbar">
       <input
-        type="text"
-        placeholder={props.placeholder}
-        onChange={(event) => {
-          props.setState(event.target.value);
-        }}
+        type={type}
+        value={value}
+        name={name}
+        placeholder={placeholder}
+        onChange={onChange}
       />
-      <Button title="Search" onClickFunction={props.onClickFunction} />
+      <Button title="Search" onClick={onClick} />
     </div>
   );
 };
+
+export default SearchBar;
