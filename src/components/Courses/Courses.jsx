@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { CourseCard } from './components/CourseCard/CourseCard';
-import { Button } from '../../common/Button/Button';
-import { CreateCourse } from '../CreateCourse/CreateCourse';
+import CourseCard from './components/CourseCard';
+import Button from '../../common/Button';
+import CreateCourse from '../CreateCourse';
 import { getCourseDuration } from '../../helpers/index';
-import { SearchBar } from './components/SearchBar/SearchBar';
+import SearchBar from './components/SearchBar';
 import './Courses.css';
 
-export const Courses = (props) => {
+const Courses = (props) => {
+  const [searchInput, setSearchInput] = useState('');
+  const [courseList, setCourseList] = useState(props.courseList);
+  const [showAddCourseScreen, setShowAddCourseScreen] = useState(false);
+
   const getAuthorName = (authorCodeArray) => {
     const authorsArray = [];
     let authorsArrayCounter = 1;
@@ -31,61 +35,56 @@ export const Courses = (props) => {
     return authorName;
   };
 
-  const [searchTerm, setSearchTerm] = useState('');
-  const [courseList, setCourseList] = useState(props.courseList);
-
-  const searchHandler = (event) => {
-    event.preventDefault();
-    setCourseList(
-      props.courseList.filter((value) => {
-        if (searchTerm === '') {
-          return value;
-        } else if (
-          value.title
-            .toLocaleLowerCase()
-            .includes(searchTerm.toLocaleLowerCase()) ||
-          value.id.includes(searchTerm)
-        ) {
-          return value;
-        }
-      })
-    );
+  const handleChange = (e) => {
+    setSearchInput(e.target.value);
   };
 
-  const [showAddCourseScreen, setShowAddCourseScreen] = useState(false);
+  const handleSearchClick = () => {
+    const filtered = props.courseList.filter((course) => {
+      return searchInput.trim() === '' || searchInput === ''
+        ? course
+        : course.title.toLowerCase().includes(searchInput.toLowerCase()) ||
+            course.id.toLowerCase().includes(searchInput.toLowerCase());
+    });
+
+    setCourseList(filtered);
+  };
 
   const addNewCourseHandler = (enteredNewCourseData) => {
     const courseData = {
       ...enteredNewCourseData,
       id: Math.random().toString(),
     };
-
-    if (showAddCourseScreen === false) {
-      setShowAddCourseScreen(true);
-    } else {
-      setShowAddCourseScreen(false);
+    if (showAddCourseScreen) {
       props.addCourse(courseData);
     }
+    setShowAddCourseScreen(!showAddCourseScreen);
   };
 
   const addNewAuthorHandler = (enteredNewAuthorData) => {
     const authorData = {
-      id: Math.random(100).toString(),
+      id: Math.random().toString(),
       ...enteredNewAuthorData,
     };
     props.addAuthor(authorData);
   };
 
-  const displayCourses = (courseList) => {
-    return courseList.map((data) => (
-      <CourseCard
-        title={data.title}
-        description={data.description}
-        creationDate={data.creationDate}
-        duration={getCourseDuration(data.duration)}
-        authors={getAuthorName(data.authors)}
-      />
-    ));
+  const displayCourses = () => {
+    if (courseList === undefined || !courseList.length) {
+      return <p>No courses available</p>;
+    } else {
+      return courseList.map((course) => (
+        <CourseCard
+          key={course.id}
+          id={course.id}
+          title={course.title}
+          description={course.description}
+          authors={getAuthorName(course.authors)}
+          duration={course.duration}
+          creationDate={course.creationDate}
+        />
+      ));
+    }
   };
 
   useEffect(() => {
@@ -107,19 +106,21 @@ export const Courses = (props) => {
       <div className="container">
         <div className="row">
           <SearchBar
+            type="text"
+            name="search"
             placeholder="Enter course name..."
-            setState={setSearchTerm}
-            onClickFunction={searchHandler}
+            value={searchInput}
+            onChange={handleChange}
+            onClick={handleSearchClick}
           />
           <div className="AddCourseButton">
-            <Button
-              title="Add new course"
-              onClickFunction={addNewCourseHandler}
-            />
+            <Button title="Add new course" onClick={addNewCourseHandler} />
           </div>
         </div>
-        {displayCourses(courseList)}
+        {displayCourses()}
       </div>
     );
   }
 };
+
+export default Courses;

@@ -1,6 +1,11 @@
 import './App.css';
+<<<<<<< HEAD
 import { Header } from './components/Header/Header';
 import { Courses } from './components/Courses/Courses';
+=======
+import Header from './components/Header';
+import Courses from './components/Courses';
+>>>>>>> week1
 import { useState, useEffect } from 'react';
 import { mockedCoursesList, mockedAuthorsList } from './MockedData';
 
@@ -9,7 +14,11 @@ function App() {
   const [authorsList, setAuthorsList] = useState(mockedAuthorsList);
 
   useEffect(() => {
+<<<<<<< HEAD
     return setCourseList(courseList);
+=======
+    setCourseList(courseList);
+>>>>>>> week1
   }, [courseList]);
 
   useEffect(() => {
@@ -20,7 +29,10 @@ function App() {
     setCourseList((prevCourseList) => {
       return [...prevCourseList, newCourse];
     });
+<<<<<<< HEAD
     console.log(courseList);
+=======
+>>>>>>> week1
   };
 
   const addAuthorHandler = (newAuthor) => {

@@ -1,9 +1,17 @@
 import React from 'react';
+<<<<<<< HEAD
 import { Button } from '../../../../common/Button/Button';
 import { formatDate } from '../../../../helpers';
 import './CourseCard.css';
 
 export const CourseCard = (props) => {
+=======
+import Button from '../../../../common/Button';
+import { formatDate } from '../../../../helpers';
+import './CourseCard.css';
+
+const CourseCard = (props) => {
+>>>>>>> week1
   const { title, description, authors, duration, creationDate } = props;
   return (
     <div className="CourseCardContainer">
@@ -35,3 +43,8 @@ export const CourseCard = (props) => {
     </div>
   );
 };
+<<<<<<< HEAD
+=======
+
+export default CourseCard;
+>>>>>>> week1
