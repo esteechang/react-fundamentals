@@ -1,24 +1,17 @@
 import './App.css';
-<<<<<<< HEAD
-import { Header } from './components/Header/Header';
-import { Courses } from './components/Courses/Courses';
-=======
+import { Routes, Route } from 'react-router-dom';
 import Header from './components/Header';
 import Courses from './components/Courses';
->>>>>>> week1
 import { useState, useEffect } from 'react';
 import { mockedCoursesList, mockedAuthorsList } from './MockedData';
+import CourseInfo from './components/CourseInfo';
 
 function App() {
   const [courseList, setCourseList] = useState(mockedCoursesList);
   const [authorsList, setAuthorsList] = useState(mockedAuthorsList);
 
   useEffect(() => {
-<<<<<<< HEAD
-    return setCourseList(courseList);
-=======
     setCourseList(courseList);
->>>>>>> week1
   }, [courseList]);
 
   useEffect(() => {
@@ -29,10 +22,6 @@ function App() {
     setCourseList((prevCourseList) => {
       return [...prevCourseList, newCourse];
     });
-<<<<<<< HEAD
-    console.log(courseList);
-=======
->>>>>>> week1
   };
 
   const addAuthorHandler = (newAuthor) => {
@@ -45,14 +34,29 @@ function App() {
   return (
     <div className="App">
       <Header username="user" />
-      <div>
-        <Courses
-          courseList={courseList}
-          authorsList={authorsList}
-          addCourse={addCourseHandler}
-          addAuthor={addAuthorHandler}
+      <Routes>
+        {/* <Route exact path="/login" component={Login} /> */}
+        {/* <Route exact path="/registration" component={Registration} /> */}
+        <Route
+          exact
+          path="/courses"
+          element={
+            <Courses
+              courseList={courseList}
+              authorsList={authorsList}
+              addCourse={addCourseHandler}
+              addAuthor={addAuthorHandler}
+            />
+          }
         />
-      </div>
+        {/* <Route exact path="/courses/add" component={CreateCourse} /> */}
+        <Route exact path="/courses/:courseId" element={<CourseInfo />} />
+        {/* <PrivateRoute
+          exact
+          path="/courses/update/:courseId"
+          component={UpdateCourse}
+        /> */}
+      </Routes>
     </div>
   );
 }

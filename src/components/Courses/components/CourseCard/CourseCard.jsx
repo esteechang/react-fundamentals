@@ -1,18 +1,11 @@
 import React from 'react';
-<<<<<<< HEAD
-import { Button } from '../../../../common/Button/Button';
-import { formatDate } from '../../../../helpers';
-import './CourseCard.css';
-
-export const CourseCard = (props) => {
-=======
+import { Link } from 'react-router-dom';
 import Button from '../../../../common/Button';
 import { formatDate } from '../../../../helpers';
 import './CourseCard.css';
 
 const CourseCard = (props) => {
->>>>>>> week1
-  const { title, description, authors, duration, creationDate } = props;
+  const { title, description, authors, duration, creationDate, id } = props;
   return (
     <div className="CourseCardContainer">
       <div className="LeftContainer">
@@ -37,14 +30,13 @@ const CourseCard = (props) => {
           </div>
         </div>
         <div className="ButtonContainer">
-          <Button title="Show Course" />
+          <Link to={`/courses/${id}`}>
+            <Button title="Show Course" />
+          </Link>
         </div>
       </div>
     </div>
   );
 };
-<<<<<<< HEAD
-=======
 
 export default CourseCard;
->>>>>>> week1
