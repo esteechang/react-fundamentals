@@ -9,3 +9,7 @@ button {
 button:active {
   background-color: grey;
 }
+
+.error {
+  border: 3px solid red;
+}

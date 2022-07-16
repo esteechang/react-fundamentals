@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom/';
+import { Link, useNavigate } from 'react-router-dom/';
+import axios from 'axios';
 import Input from '../../common/Input';
 import Button from '../../common/Button';
 import './Login.css';
@@ -12,17 +13,14 @@ const ErrorMessage = () => {
   );
 };
 
-const RequiredFieldMessage = () => {
-  return <div className="requiredField">This field is required!</div>;
-};
-
 const Login = () => {
+  const navigate = useNavigate();
+  const token = localStorage.getItem('token');
   const [loginDetails, setLoginDetails] = useState({
-    email: '',
-    password: '',
+    email: 'admin@mail.com',
+    password: '123456',
   });
-  const [emailError, setEmailError] = useState(false);
-  const [passwordError, setPasswordError] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,7 +32,17 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(loginDetails);
+    login();
+  };
+
+  const login = async () => {
+    await axios
+      .post('http://localhost:4000/login', loginDetails)
+      .then((response) => {
+        localStorage.setItem('token', response.data.result);
+        navigate('/courses');
+      })
+      .catch((error) => setError(true));
   };
 
   return (
@@ -61,6 +69,7 @@ const Login = () => {
 
         <Button title="Login" />
 
+        {error && <ErrorMessage />}
         <div className="footer">
           If you do not have an account, you can{' '}
           <Link to={`/registration`} className="link">

@@ -1,5 +1,5 @@
 import './App.css';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import Header from './components/Header';
 import Courses from './components/Courses';
 import Login from './components/Login/Login';
@@ -7,8 +7,11 @@ import { useState, useEffect } from 'react';
 import { mockedCoursesList, mockedAuthorsList } from './MockedData';
 import CourseInfo from './components/CourseInfo';
 import Registration from './components/Registration/Registration';
+import CreateCourse from './components/CreateCourse/';
+import CreateCourse1 from './components/CreateCourse/CreateCourse1';
 
 function App() {
+  const token = localStorage.getItem('token');
   const [courseList, setCourseList] = useState(mockedCoursesList);
   const [authorsList, setAuthorsList] = useState(mockedAuthorsList);
 
@@ -37,6 +40,11 @@ function App() {
     <div className="App">
       <Header username="user" />
       <Routes>
+        {token ? (
+          <Route path="/" element={<Navigate replace to="/courses" />} />
+        ) : (
+          <Route path="/" element={<Navigate replace to="/login" />} />
+        )}
         <Route exact path="/login" element={<Login />} />
         <Route exact path="/registration" element={<Registration />} />
         <Route
@@ -51,13 +59,8 @@ function App() {
             />
           }
         />
-        {/* <Route exact path="/courses/add" component={CreateCourse} /> */}
         <Route exact path="/courses/:courseId" element={<CourseInfo />} />
-        {/* <PrivateRoute
-          exact
-          path="/courses/update/:courseId"
-          component={UpdateCourse}
-        /> */}
+        <Route exact path="/courses/add" element={<CreateCourse1 />} />
       </Routes>
     </div>
   );

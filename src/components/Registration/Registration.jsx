@@ -45,7 +45,6 @@ const Registration = () => {
     await axios
       .post('http://localhost:4000/register', registrationDetails)
       .then((response) => {
-        console.log(response);
         if (response.data.successful === true) {
           setError('none');
           setTimeout(() => {
