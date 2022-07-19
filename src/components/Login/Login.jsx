@@ -15,10 +15,9 @@ const ErrorMessage = () => {
 
 const Login = () => {
   const navigate = useNavigate();
-  const token = localStorage.getItem('token');
   const [loginDetails, setLoginDetails] = useState({
-    email: 'admin@mail.com',
-    password: '123456',
+    email: '',
+    password: '',
   });
   const [error, setError] = useState(false);
 
@@ -40,6 +39,7 @@ const Login = () => {
       .post('http://localhost:4000/login', loginDetails)
       .then((response) => {
         localStorage.setItem('token', response.data.result);
+        localStorage.setItem('name', response.data.user.name);
         navigate('/courses');
       })
       .catch((error) => setError(true));

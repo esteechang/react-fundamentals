@@ -7,8 +7,7 @@ import { useState, useEffect } from 'react';
 import { mockedCoursesList, mockedAuthorsList } from './MockedData';
 import CourseInfo from './components/CourseInfo';
 import Registration from './components/Registration/Registration';
-import CreateCourse from './components/CreateCourse/';
-import CreateCourse1 from './components/CreateCourse/CreateCourse1';
+import CreateCourse from './components/CreateCourse';
 
 function App() {
   const token = localStorage.getItem('token');
@@ -38,7 +37,7 @@ function App() {
 
   return (
     <div className="App">
-      <Header username="user" />
+      <Header />
       <Routes>
         {token ? (
           <Route path="/" element={<Navigate replace to="/courses" />} />
@@ -60,7 +59,7 @@ function App() {
           }
         />
         <Route exact path="/courses/:courseId" element={<CourseInfo />} />
-        <Route exact path="/courses/add" element={<CreateCourse1 />} />
+        <Route exact path="/courses/add" element={<CreateCourse />} />
       </Routes>
     </div>
   );

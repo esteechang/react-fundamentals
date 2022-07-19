@@ -1,223 +1,195 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
+import { Link } from 'react-router-dom';
+import { mockedAuthorsList, mockedCoursesList } from '../../MockedData';
 import Button from '../../common/Button';
-import { getCourseDuration } from '../../helpers/index';
+import Input from '../../common/Input';
 import './CreateCourse.css';
+import { getCourseDuration } from '../../helpers';
 
 const CreateCourse = (props) => {
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [timeDuration, setTimeDuration] = useState(0);
-  const [courseAuthorList, setCourseAuthorList] = useState(
-    props.authorsList.map((data) => data.id)
-  );
-  const [selectedAuthorList, setSelectedAuthorList] = useState([]);
-  const [newAuthorName, setNewAuthorName] = useState('');
+  const today = new Date();
 
-  const titleChangeHandler = (event) => {
-    setTitle(event.target.value);
+  const date =
+    today.getDate() +
+    '/' +
+    parseInt(today.getMonth() + 1) +
+    '/' +
+    today.getFullYear();
+
+  const [courseInfo, setCourseInfo] = useState({
+    id: uuidv4(),
+    title: '',
+    description: '',
+    creationDate: date,
+    duration: '',
+    authors: [],
+  });
+  const [authorInfo, setAuthorInfo] = useState({ id: '', name: '' });
+
+  const authorsNameArray = mockedAuthorsList.map((author) => author.name);
+  const [authorsNameList, setAuthorsNameList] = useState(authorsNameArray);
+
+  const [selectedAuthors, setSelectedAuthors] = useState([]);
+  const [newAuthorsList, setNewAuthorsList] = useState(mockedAuthorsList);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setCourseInfo((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const descriptionChangeHandler = (event) => {
-    setDescription(event.target.value);
+  const handleAuthorInput = (e) => {
+    setAuthorInfo((prev) => ({
+      ...prev,
+      id: uuidv4(),
+      name: e.target.value,
+    }));
   };
 
-  const durationChangeHandler = (event) => {
-    setTimeDuration(event.target.value);
+  const handleCreateAuthorButton = (author) => {
+    setAuthorsNameList([...authorsNameList, author]);
+    newAuthorsList.push(authorInfo);
+    setAuthorInfo({ id: '', name: '' });
   };
 
-  const newAuthorHandler = (event) => {
-    setNewAuthorName(event.target.value);
+  const handleAddAuthorClick = (author) => {
+    const remainingAuthors = newAuthorsList.filter((a) => a.id !== author.id);
+
+    setNewAuthorsList(remainingAuthors);
+    selectedAuthors.push(author);
+
+    const selectedAuthorsId = selectedAuthors.map((author) => author.id);
+    setCourseInfo({ ...courseInfo, authors: selectedAuthorsId });
   };
 
-  const addNewAuthorHandler = (event) => {
-    event.preventDefault();
-    if (newAuthorName === '' || newAuthorName.trim().length < 2) {
-      return;
-    } else {
-      const newAuthor = {
-        name: newAuthorName,
-      };
-      props.addNewAuthorHandler(newAuthor);
-    }
-  };
-
-  const checkAuthorId = (authorCode) => {
-    let authorName = 'Author ID not found!';
-    props.authorsList.forEach((author) => {
-      if (author.id === authorCode) {
-        return (authorName = author.name);
-      }
-    });
-    return authorName;
-  };
-
-  const addCourseAuthorHandler = (event) => {
-    event.preventDefault();
-    setSelectedAuthorList((prevSelectedAuthorList) => {
-      return [...prevSelectedAuthorList, event.target.value];
-    });
-    setCourseAuthorList(
-      courseAuthorList.filter((data) => data !== event.target.value)
+  const handleDeleteAuthorClick = (author) => {
+    const newSelectedAuthorList = selectedAuthors.filter(
+      (a) => a.id !== author.id
     );
+    setSelectedAuthors(newSelectedAuthorList);
+    newAuthorsList.push(author);
+
+    const selectedAuthorsId = newSelectedAuthorList.map((author) => author.id);
+    setCourseInfo({ ...courseInfo, authors: selectedAuthorsId });
   };
 
-  const removeCourseAuthorHandler = (event) => {
-    event.preventDefault();
-    setCourseAuthorList((prevCourseAuthorList) => {
-      return [...prevCourseAuthorList, event.target.value];
+  const handleCreateCourseButton = () => {
+    setCourseInfo({
+      ...courseInfo,
+      title: courseInfo.title,
+      description: courseInfo.description,
+      duration: courseInfo.duration,
     });
-    setSelectedAuthorList(
-      selectedAuthorList.filter((data) => data !== event.target.value)
-    );
+
+    mockedCoursesList.push(courseInfo);
   };
 
-  const displayAuthorsList = (authorList) => {
-    return authorList.map((data) => {
-      return (
-        <div className="AddAuthorSegment">
-          <div className="AuthorName">
-            <p>{checkAuthorId(data)}</p>
-          </div>
-          <div className="AuthorButton">
-            <Button
-              onClick={addCourseAuthorHandler}
-              title="Add Author"
-              className="AuthorButton"
-              value={data}
-            />
-          </div>
-        </div>
-      );
-    });
-  };
-
-  const displaySelectedAuthorsList = (selectedAuthorArray) => {
-    if (selectedAuthorArray.length === 0) {
-      return (
-        <div className="EmptyCourseAuthorSegment">
-          <p>Author List is Empty</p>
-        </div>
-      );
-    } else {
-      return selectedAuthorArray.map((data) => {
-        return (
-          <div className="AddAuthorSegment">
-            <div className="AuthorName">
-              <p>{checkAuthorId(data)}</p>
-            </div>
-            <div className="AuthorButton">
-              <Button
-                onClick={removeCourseAuthorHandler}
-                title="Remove Author"
-                className="AuthorButton"
-                value={data}
-              />
-            </div>
-          </div>
-        );
-      });
-    }
-  };
-
-  const submitHandler = (event) => {
-    event.preventDefault();
+  const CreateCourseButton = () => {
     if (
-      title === '' ||
-      description === '' ||
-      timeDuration === 0 ||
-      selectedAuthorList.length === 0
+      !courseInfo.authors.length ||
+      courseInfo.description.length < 2 ||
+      courseInfo.duration < 1 ||
+      courseInfo.title.length < 2
     ) {
-      alert('Please fill in all fields!');
+      return <Button title="Create course" error />;
     } else {
-      const today = new Date();
-      const date =
-        today.getDate() +
-        '/' +
-        parseInt(today.getMonth() + 1) +
-        '/' +
-        today.getFullYear();
-      const newCourse = {
-        id: uuidv4(),
-        title: title,
-        description: description,
-        creationDate: date,
-        duration: timeDuration,
-        authors: selectedAuthorList,
-      };
-      props.addNewCourseHandler(newCourse);
+      return (
+        <Link to={'/courses'}>
+          <Button title="Create course" onClick={handleCreateCourseButton} />
+        </Link>
+      );
     }
   };
-
-  useEffect(() => {
-    setCourseAuthorList(props.authorsList.map((data) => data.id));
-  }, [props.authorsList]);
 
   return (
-    <div className="Create">
-      <form onSubmit={submitHandler}>
-        <div className="TopSegmentTitleAndButton">
-          <div>
-            <h4>Title:</h4>
-            <input
-              placeholder="Enter Title..."
-              className="CreateCourseTitle"
-              onChange={titleChangeHandler}
-            />
-          </div>
-          <div className="CreateCourseButton">
-            <Button title="Create Course" type="submit" />
-          </div>
-        </div>
-        <div className="Description">
-          <h4>Description:</h4>
-          <textarea
-            placeholder="Enter Description..."
-            className="CreateCourseDescription"
-            onChange={descriptionChangeHandler}
+    <div className="container">
+      <div className="firstRow">
+        <div className="titleContainer">
+          <Input
+            type="text"
+            value={courseInfo.title}
+            name="title"
+            onChange={handleChange}
+            placeholder="Enter title..."
+            label="Title"
           />
         </div>
-        <div className="BottomSegment">
-          <div className="BottomSegmentLeft">
-            <div className="AddAuthor">
-              <h2>Add Authors</h2>
-              <h4>Author name</h4>
-              <input
-                type="text"
-                placeholder="Enter Author Name"
-                className="CreateCourseAddAuthor"
-                onChange={newAuthorHandler}
-              />
-              <Button title="Create Author" onClick={addNewAuthorHandler} />
-            </div>
-            <div className="Duration">
-              <h2>Duration</h2>
-              <h4>Duration</h4>
-              <input
-                type="number"
-                placeholder="Enter duration in minutes..."
-                onChange={durationChangeHandler}
-                min="0"
-                className="CreateCourseDuration"
-              />
-              <div className="DurationDisplay">
-                <p>Duration :</p>
-                <h3>{getCourseDuration(timeDuration)}</h3>
-              </div>
-            </div>
-          </div>
-          <div className="BottomSegmentRight">
-            <div className="CourseAuthorsSegment">
-              <h2>Authors</h2>
-              {displayAuthorsList(courseAuthorList)}
-            </div>
-            <div className="CourseAuthorsSegment">
-              <h2>Course Authors</h2>
-              {displaySelectedAuthorsList(selectedAuthorList)}
-            </div>
+        <div className="buttonContainer">
+          <CreateCourseButton />
+        </div>
+      </div>
+      <p className="label"> Description</p>
+      <textarea
+        className="textarea"
+        type="text"
+        value={courseInfo.description}
+        name="description"
+        onChange={handleChange}
+        placeholder="Enter description..."
+      />
+      <div className="authorInfoContainer">
+        <div className="leftRightContainer">
+          <p className="authorLabel">Add author</p>
+          <Input
+            type="text"
+            value={authorInfo.name}
+            name="name"
+            onChange={handleAuthorInput}
+            placeholder="Enter author name..."
+            label="Author name"
+          />
+          <Button
+            title="Create author"
+            onClick={() => handleCreateAuthorButton(authorInfo.name)}
+          />
+          <div style={{ padding: 20 }}></div>
+          <Input
+            type="number"
+            value={courseInfo.duration}
+            name="duration"
+            onChange={handleChange}
+            placeholder="Enter duration in minutes..."
+            label="Duration"
+          />
+          <div>
+            Duration:
+            <p style={{ display: 'inline', fontWeight: 'bold' }}>
+              {' '}
+              {getCourseDuration(courseInfo.duration)}
+            </p>
           </div>
         </div>
-      </form>
+
+        <div className="leftRightContainer">
+          <p className="authorLabel">Authors</p>
+          {newAuthorsList.map((author) => (
+            <div className="authorsContainer" key={author.id}>
+              <p className="authorName"> {author.name}</p>
+              <Button
+                title="Add author"
+                onClick={() => handleAddAuthorClick(author)}
+              />
+            </div>
+          ))}
+
+          <p className="authorLabel">Course authors</p>
+
+          {selectedAuthors.length > 0
+            ? selectedAuthors.map((author) => (
+                <div className="authorsContainer" key={author.id}>
+                  <p className="authorName">{author.name}</p>
+                  <Button
+                    title="Delete author"
+                    onClick={() => handleDeleteAuthorClick(author)}
+                  />
+                </div>
+              ))
+            : 'Author list is empty'}
+        </div>
+      </div>
     </div>
   );
 };
