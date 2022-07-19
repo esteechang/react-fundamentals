@@ -1,0 +1,25 @@
+.errorMsg {
+  color: red;
+  margin-top: 20px;
+}
+
+.requiredField {
+  margin-bottom: 20px;
+}
+
+.container {
+  margin-top: 20px;
+  border: 2px solid skyblue;
+  padding: 20px;
+  justify-content: center;
+  display: flex;
+  flex-direction: column;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.footer {
+  margin: 20px;
+}

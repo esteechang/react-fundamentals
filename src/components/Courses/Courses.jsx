@@ -5,6 +5,7 @@ import CreateCourse from '../CreateCourse';
 import { getCourseDuration } from '../../helpers/index';
 import SearchBar from './components/SearchBar';
 import './Courses.css';
+import { Link } from 'react-router-dom';
 
 const Courses = (props) => {
   const [searchInput, setSearchInput] = useState('');
@@ -91,36 +92,26 @@ const Courses = (props) => {
     setCourseList(props.courseList);
   }, [props.courseList]);
 
-  if (showAddCourseScreen) {
-    return (
-      <div>
-        <CreateCourse
-          authorsList={props.authorsList}
-          addNewCourseHandler={addNewCourseHandler}
-          addNewAuthorHandler={addNewAuthorHandler}
+  return (
+    <div className="container">
+      <div className="row">
+        <SearchBar
+          type="text"
+          name="search"
+          placeholder="Enter course name..."
+          value={searchInput}
+          onChange={handleChange}
+          onClick={handleSearchClick}
         />
-      </div>
-    );
-  } else {
-    return (
-      <div className="container">
-        <div className="row">
-          <SearchBar
-            type="text"
-            name="search"
-            placeholder="Enter course name..."
-            value={searchInput}
-            onChange={handleChange}
-            onClick={handleSearchClick}
-          />
-          <div className="AddCourseButton">
-            <Button title="Add new course" onClick={addNewCourseHandler} />
-          </div>
+        <div className="AddCourseButton">
+          <Link to={'/courses/add'}>
+            <Button title="Add new course" />
+          </Link>
         </div>
-        {displayCourses()}
       </div>
-    );
-  }
+      {displayCourses()}
+    </div>
+  );
 };
 
 export default Courses;

@@ -1,0 +1,24 @@
+.container {
+  margin-top: 20px;
+  border: 2px solid skyblue;
+  padding: 20px;
+  justify-content: center;
+}
+
+.link {
+  text-decoration: none;
+}
+
+.footer {
+  margin: 20px;
+}
+
+.errorMsg {
+  color: red;
+  margin-top: 20px;
+}
+
+.successMsg {
+  color: green;
+  margin-top: 20px;
+}

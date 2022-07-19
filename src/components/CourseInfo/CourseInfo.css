@@ -1,0 +1,49 @@
+.container {
+  margin-top: 20px;
+  border: 2px solid skyblue;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.back {
+  text-decoration: none;
+  color: black;
+  cursor: pointer;
+}
+
+.courseInfoContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.left {
+  width: 800px;
+  margin-right: 15px;
+  margin-top: 15px;
+
+  text-align: left;
+  margin-left: 10px;
+  justify-content: center;
+}
+
+.right {
+  display: flex;
+  flex-direction: column;
+}
+
+.infoContainer {
+  display: flex;
+  flex-direction: row;
+}
+
+.label {
+  font-weight: bold;
+  margin-right: 3px;
+}
+
+.info {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline;
+}
